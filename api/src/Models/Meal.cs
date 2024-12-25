@@ -21,6 +21,6 @@ namespace ScienceBasedMealsApi.Models
 
         public ICollection<MealVersion> MealVersions { get; set; } = [];
 
-        public ICollection<SavedMeal> SavedMeals { get; set; } = [];
+        public ICollection<UserMeal> SavedMeals { get; set; } = [];
     }
 }

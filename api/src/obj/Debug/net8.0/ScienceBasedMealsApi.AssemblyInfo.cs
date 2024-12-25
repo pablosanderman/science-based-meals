@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ScienceBasedMealsApi")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+be87b98faa30352f49a036f53e3ac18b3fe2e686")]
 [assembly: System.Reflection.AssemblyProductAttribute("ScienceBasedMealsApi")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ScienceBasedMealsApi")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

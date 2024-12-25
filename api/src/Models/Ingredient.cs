@@ -15,25 +15,17 @@ namespace ScienceBasedMealsApi.Models
 
         public string Description { get; set; } = "";
 
-        public string ExternalId { get; set; } = "";
-
-        public string Source { get; set; } = "";
-
         [Required]
+        public DateTime CreationDate { get; set; }
+
         public DateTime UpdatedAt { get; set; }
 
-        [Required]
-        public int DefaultUnitId { get; set; }
+        public ICollection<IngredientNutrient> Nutrients { get; set; } = [];
 
-        [ForeignKey("DefaultUnitId")]
-        public required Unit DefaultUnit { get; set; }
+        public ICollection<IngredientDietaryPreference> DietaryPreferences { get; set; } = [];
 
-        public ICollection<MealIngredient> MealIngredients { get; set; } = [];
+        public ICollection<IngredientResearchReference> ResearchReferences { get; set; } = [];
 
-        public ICollection<IngredientNutrient> IngredientNutrients { get; set; } = [];
-
-        public ICollection<IngredientResearchReference> IngredientResearchReferences { get; set; } = [];
-
-        public ICollection<IngredientDietaryPreference> IngredientDietaryPreferences { get; set; } = [];
+        public ICollection<MealVersionIngredient> MealVersions { get; set; } = [];
     }
 }

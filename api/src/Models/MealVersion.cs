@@ -10,35 +10,27 @@ namespace ScienceBasedMealsApi.Models
         [Key]
         public int Id { get; set; }  // meal_version_id
 
-        [Required]
+        [ForeignKey("Meal")]
         public int MealId { get; set; }
 
-        [ForeignKey("MealId")]
         public required Meal Meal { get; set; }
 
         [Required]
-        public int VersionNumber { get; set; }
-
-        public int CreatorUserId { get; set; }
-
-        [ForeignKey("CreatorUserId")]
-        public required User CreatorUser { get; set; }
-
-        public string Description { get; set; } = "";
+        public int Version { get; set; }
 
         [Required]
         public DateTime CreationDate { get; set; }
 
-        public DateTime UpdatedAt { get; set; }
+        public string Instructions { get; set; } = "";
 
-        public ICollection<MealIngredient> MealIngredients { get; set; } = [];
+        public string Notes { get; set; } = "";
 
-        public ICollection<MealApproval> MealApprovals { get; set; } = [];
+        public ApprovalStatus ApprovalStatus { get; set; }
 
-        public ICollection<MealVersionResearchReference> MealVersionResearchReferences { get; set; } = [];
+        public DateTime? ApprovalDate { get; set; }
 
-        public ICollection<MealComment> MealComments { get; set; } = [];
+        public ICollection<MealVersionResearchReference> ResearchReferences { get; set; } = [];
 
-        public ICollection<MealLike> MealLikes { get; set; } = [];
+        public ICollection<MealVersionIngredient> Ingredients { get; set; } = [];
     }
 }

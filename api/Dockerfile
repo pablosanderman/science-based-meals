@@ -3,6 +3,9 @@ WORKDIR /src
 COPY ["src/ScienceBasedMealsApi.csproj", "./"]
 RUN dotnet restore
 COPY src/. .
+RUN dotnet tool install --global dotnet-ef
+ENV PATH="${PATH}:/root/.dotnet/tools"
+RUN dotnet ef migrations add InitialCreate
 RUN dotnet build -c Release -o /app/build
 RUN dotnet publish -c Release -o /app/publish
 
