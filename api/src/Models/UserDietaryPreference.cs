@@ -7,11 +7,11 @@ namespace ScienceBasedMealsApi.Models
         [ForeignKey("User")]
         public int UserId { get; set; }
 
-        public required User User { get; set; }
+        public User? User { get; set; }
 
         [ForeignKey("DietaryPreference")]
         public int DietaryPreferenceId { get; set; }
 
-        public required DietaryPreference DietaryPreference { get; set; }
+        public DietaryPreference? DietaryPreference { get; set; }
     }
 }

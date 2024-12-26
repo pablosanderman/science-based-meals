@@ -13,13 +13,13 @@ namespace ScienceBasedMealsApi.Models
         public int UserId { get; set; }
 
         [ForeignKey("UserId")]
-        public required User User { get; set; }
+        public User? User { get; set; }
 
         [Required]
         public int NotificationTypeId { get; set; }
 
         [ForeignKey("NotificationTypeId")]
-        public required NotificationType NotificationType { get; set; }
+        public NotificationType? NotificationType { get; set; }
 
         public int? EntityId { get; set; }  // Reference to the related entity
 

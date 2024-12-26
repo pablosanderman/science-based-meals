@@ -1,6 +1,0 @@
-@ScienceBasedMealsApi_HostAddress = http://localhost:5260
-
-GET {{ScienceBasedMealsApi_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###

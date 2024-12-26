@@ -8,12 +8,12 @@ namespace ScienceBasedMealsApi.Models
         [ForeignKey("FollowerUser")]
         public int FollowerUserId { get; set; }
 
-        public required User FollowerUser { get; set; }
+        public User? FollowerUser { get; set; }
 
         [ForeignKey("FollowedUser")]
         public int FollowedUserId { get; set; }
 
-        public required User FollowedUser { get; set; }
+        public User? FollowedUser { get; set; }
 
         public DateTime ConnectionDate { get; set; }
     }

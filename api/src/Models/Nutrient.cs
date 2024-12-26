@@ -17,7 +17,7 @@ namespace ScienceBasedMealsApi.Models
         public int UnitId { get; set; }
 
         [ForeignKey("UnitId")]
-        public required Unit Unit { get; set; }
+        public Unit? Unit { get; set; }
 
         [Precision(18, 4)]
         public decimal DailyValue { get; set; }

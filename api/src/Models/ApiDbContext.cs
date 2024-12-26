@@ -34,6 +34,33 @@ namespace ScienceBasedMealsApi.Models
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            // Seed initial data
+            modelBuilder.Entity<Gender>().HasData(
+                new Gender { Id = 1, Name = "Male", Description = "Male gender" },
+                new Gender { Id = 2, Name = "Female", Description = "Female gender" },
+                new Gender { Id = 3, Name = "Other", Description = "Other gender identity" }
+            );
+
+            modelBuilder.Entity<ActivityLevel>().HasData(
+                new ActivityLevel { Id = 1, Name = "Sedentary", Description = "Little or no exercise" },
+                new ActivityLevel { Id = 2, Name = "Light", Description = "Light exercise/sports 1-3 days/week" },
+                new ActivityLevel { Id = 3, Name = "Moderate", Description = "Moderate exercise/sports 3-5 days/week" },
+                new ActivityLevel { Id = 4, Name = "Active", Description = "Hard exercise/sports 6-7 days/week" },
+                new ActivityLevel { Id = 5, Name = "Very Active", Description = "Very hard exercise/sports & physical job or training twice per day" }
+            );
+
+            modelBuilder.Entity<Goal>().HasData(
+                new Goal { Id = 1, Name = "Weight Loss", Description = "Goal to lose weight" },
+                new Goal { Id = 2, Name = "Maintenance", Description = "Goal to maintain current weight" },
+                new Goal { Id = 3, Name = "Muscle Gain", Description = "Goal to gain muscle mass" }
+            );
+
+            modelBuilder.Entity<Role>().HasData(
+                new Role { Id = 1, Name = "User" },
+                new Role { Id = 2, Name = "Moderator" },
+                new Role { Id = 3, Name = "Admin" }
+            );
+
             // Configure composite primary keys
             modelBuilder.Entity<UserDietaryPreference>()
                 .HasKey(udp => new { udp.UserId, udp.DietaryPreferenceId });

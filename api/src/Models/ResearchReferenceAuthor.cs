@@ -7,12 +7,12 @@ namespace ScienceBasedMealsApi.Models
         [ForeignKey("ResearchReference")]
         public int ReferenceId { get; set; }
 
-        public required ResearchReference ResearchReference { get; set; }
+        public ResearchReference? ResearchReference { get; set; }
 
         [ForeignKey("Author")]
         public int AuthorId { get; set; }
 
-        public required Author Author { get; set; }
+        public Author? Author { get; set; }
 
         public int AuthorOrder { get; set; }
     }

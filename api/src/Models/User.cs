@@ -43,25 +43,25 @@ namespace ScienceBasedMealsApi.Models
         public int GenderId { get; set; }
 
         [ForeignKey("GenderId")]
-        public required Gender Gender { get; set; }
+        public Gender? Gender { get; set; }
 
         [Required]
         public int ActivityLevelId { get; set; }
 
         [ForeignKey("ActivityLevelId")]
-        public required ActivityLevel ActivityLevel { get; set; }
+        public ActivityLevel? ActivityLevel { get; set; }
 
         [Required]
         public int GoalId { get; set; }
 
         [ForeignKey("GoalId")]
-        public required Goal Goal { get; set; }
+        public Goal? Goal { get; set; }
 
         [Required]
         public int RoleId { get; set; }
 
         [ForeignKey("RoleId")]
-        public required Role Role { get; set; }
+        public Role? Role { get; set; }
 
         public ICollection<UserMeal> SavedMeals { get; set; } = [];
 
