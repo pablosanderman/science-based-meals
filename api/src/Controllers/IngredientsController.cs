@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -9,99 +9,99 @@ using ScienceBasedMealsApi.Models;
 
 namespace ScienceBasedMealsApi.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class IngredientsController : ControllerBase
-    {
-        private readonly ApiDbContext _context;
+	[Route("api/[controller]")]
+	[ApiController]
+	public class IngredientsController : ControllerBase
+	{
+		private readonly ApiDbContext _context;
 
-        public IngredientsController(ApiDbContext context)
-        {
-            _context = context;
-        }
+		public IngredientsController(ApiDbContext context)
+		{
+			_context = context;
+		}
 
-        // GET: api/Ingredients
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Ingredient>>> GetIngredients()
-        {
-            return await _context.Ingredients.ToListAsync();
-        }
+		// GET: api/Ingredients
+		[HttpGet]
+		public async Task<ActionResult<IEnumerable<Ingredient>>> GetIngredients()
+		{
+			return await _context.Ingredients.ToListAsync();
+		}
 
-        // GET: api/Ingredients/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Ingredient>> GetIngredient(int id)
-        {
-            var ingredient = await _context.Ingredients.FindAsync(id);
+		// GET: api/Ingredients/5
+		[HttpGet("{id}")]
+		public async Task<ActionResult<Ingredient>> GetIngredient(int id)
+		{
+			var ingredient = await _context.Ingredients.FindAsync(id);
 
-            if (ingredient == null)
-            {
-                return NotFound();
-            }
+			if (ingredient == null)
+			{
+				return NotFound();
+			}
 
-            return ingredient;
-        }
+			return ingredient;
+		}
 
-        // PUT: api/Ingredients/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutIngredient(int id, Ingredient ingredient)
-        {
-            if (id != ingredient.Id)
-            {
-                return BadRequest();
-            }
+		// PUT: api/Ingredients/5
+		// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+		[HttpPut("{id}")]
+		public async Task<IActionResult> PutIngredient(int id, Ingredient ingredient)
+		{
+			if (id != ingredient.Id)
+			{
+				return BadRequest();
+			}
 
-            _context.Entry(ingredient).State = EntityState.Modified;
+			_context.Entry(ingredient).State = EntityState.Modified;
 
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!IngredientExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+			try
+			{
+				await _context.SaveChangesAsync();
+			}
+			catch (DbUpdateConcurrencyException)
+			{
+				if (!IngredientExists(id))
+				{
+					return NotFound();
+				}
+				else
+				{
+					throw;
+				}
+			}
 
-            return NoContent();
-        }
+			return NoContent();
+		}
 
-        // POST: api/Ingredients
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
-        public async Task<ActionResult<Ingredient>> PostIngredient(Ingredient ingredient)
-        {
-            _context.Ingredients.Add(ingredient);
-            await _context.SaveChangesAsync();
+		// POST: api/Ingredients
+		// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+		[HttpPost]
+		public async Task<ActionResult<Ingredient>> PostIngredient(Ingredient ingredient)
+		{
+			_context.Ingredients.Add(ingredient);
+			await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetIngredient", new { id = ingredient.Id }, ingredient);
-        }
+			return CreatedAtAction("GetIngredient", new { id = ingredient.Id }, ingredient);
+		}
 
-        // DELETE: api/Ingredients/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteIngredient(int id)
-        {
-            var ingredient = await _context.Ingredients.FindAsync(id);
-            if (ingredient == null)
-            {
-                return NotFound();
-            }
+		// DELETE: api/Ingredients/5
+		[HttpDelete("{id}")]
+		public async Task<IActionResult> DeleteIngredient(int id)
+		{
+			var ingredient = await _context.Ingredients.FindAsync(id);
+			if (ingredient == null)
+			{
+				return NotFound();
+			}
 
-            _context.Ingredients.Remove(ingredient);
-            await _context.SaveChangesAsync();
+			_context.Ingredients.Remove(ingredient);
+			await _context.SaveChangesAsync();
 
-            return NoContent();
-        }
+			return NoContent();
+		}
 
-        private bool IngredientExists(int id)
-        {
-            return _context.Ingredients.Any(e => e.Id == id);
-        }
-    }
+		private bool IngredientExists(int id)
+		{
+			return _context.Ingredients.Any(e => e.Id == id);
+		}
+	}
 }

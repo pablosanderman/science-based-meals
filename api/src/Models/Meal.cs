@@ -4,23 +4,23 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ScienceBasedMealsApi.Models
 {
-    public class Meal
-    {
-        [Key]
-        public int Id { get; set; }  // meal_id
+	public class Meal
+	{
+		[Key]
+		public int Id { get; set; }  // meal_id
 
-        [Required]
-        public string Name { get; set; } = "";
+		[Required]
+		public string Name { get; set; } = "";
 
-        public string Description { get; set; } = "";
+		public string Description { get; set; } = "";
 
-        [Required]
-        public DateTime CreationDate { get; set; }
+		[Required]
+		public DateTime CreationDate { get; set; }
 
-        public DateTime UpdatedAt { get; set; }
+		public DateTime UpdatedAt { get; set; }
 
-        public ICollection<MealVersion> MealVersions { get; set; } = [];
+		public ICollection<MealVersion> MealVersions { get; set; } = [];
 
-        public ICollection<UserMeal> SavedMeals { get; set; } = [];
-    }
+		public ICollection<UserMeal> SavedMeals { get; set; } = [];
+	}
 }

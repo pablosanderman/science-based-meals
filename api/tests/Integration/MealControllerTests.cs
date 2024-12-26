@@ -8,25 +8,25 @@ namespace ScienceBasedMealsApi.Tests.Integration;
 
 public class MealControllerTests : IClassFixture<CustomWebApplicationFactory<Program>>
 {
-  private readonly CustomWebApplicationFactory<Program> _factory;
-  private readonly HttpClient _client;
+	private readonly CustomWebApplicationFactory<Program> _factory;
+	private readonly HttpClient _client;
 
-  public MealControllerTests(CustomWebApplicationFactory<Program> factory)
-  {
-    _factory = factory;
-    _client = factory.CreateClient(new WebApplicationFactoryClientOptions
-    {
-      AllowAutoRedirect = false
-    });
-  }
+	public MealControllerTests(CustomWebApplicationFactory<Program> factory)
+	{
+		_factory = factory;
+		_client = factory.CreateClient(new WebApplicationFactoryClientOptions
+		{
+			AllowAutoRedirect = false
+		});
+	}
 
-  [Fact]
-  public async Task GetMeals_ReturnsSuccessStatusCode()
-  {
-    // Act
-    var response = await _client.GetAsync("/api/meals");
+	[Fact]
+	public async Task GetMeals_ReturnsSuccessStatusCode()
+	{
+		// Act
+		var response = await _client.GetAsync("/api/meals");
 
-    // Assert
-    response.StatusCode.Should().Be(HttpStatusCode.OK);
-  }
+		// Assert
+		response.StatusCode.Should().Be(HttpStatusCode.OK);
+	}
 }

@@ -1,0 +1,58 @@
+name: .NET CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    services:
+      postgres:
+        image: postgres:latest
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: sciencebasedmeals_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: 8.0.x
+        
+    - name: Restore dependencies
+      working-directory: ./api
+      run: dotnet restore
+      
+    - name: Format code
+      working-directory: ./api
+      run: |
+        dotnet tool install -g dotnet-format
+        dotnet format
+        
+    - name: Check code formatting
+      working-directory: ./api
+      run: dotnet format --verify-no-changes
+
+    - name: Build
+      working-directory: ./api
+      run: dotnet build --no-restore
+      
+    - name: Test
+      working-directory: ./api/tests
+      run: dotnet test --no-build --verbosity normal
+      env:
+        ConnectionStrings__DefaultConnection: "Host=localhost;Database=sciencebasedmeals_test;Username=postgres;Password=postgres" 
