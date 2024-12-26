@@ -13,7 +13,7 @@ public class CustomWebApplicationFactory<TProgram> : WebApplicationFactory<TProg
 	{
 		builder.ConfigureAppConfiguration((context, config) =>
 		{
-			var inMemorySettings = new Dictionary<string, string>
+			var inMemorySettings = new Dictionary<string, string?>
 			{
 				{"ConnectionStrings:DefaultConnection", "DataSource=:memory:"}
 			};
