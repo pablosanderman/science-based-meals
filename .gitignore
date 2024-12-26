@@ -1,0 +1,10 @@
+# stuff I don't want git to see
+bin/
+obj/
+node_modules/
+.env
+.vs/
+.vscode/
+.idea/
+.DS_Store
+*.log
