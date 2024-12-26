@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScienceBasedMealsApi", "src\ScienceBasedMealsApi.csproj", "{4095681A-FD27-43E4-98C2-6FB83D2B23C5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "tests", "tests\tests.csproj", "{37E8E532-0147-4778-851F-8310FD7386C6}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4095681A-FD27-43E4-98C2-6FB83D2B23C5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4095681A-FD27-43E4-98C2-6FB83D2B23C5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4095681A-FD27-43E4-98C2-6FB83D2B23C5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4095681A-FD27-43E4-98C2-6FB83D2B23C5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{37E8E532-0147-4778-851F-8310FD7386C6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{37E8E532-0147-4778-851F-8310FD7386C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{37E8E532-0147-4778-851F-8310FD7386C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{37E8E532-0147-4778-851F-8310FD7386C6}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

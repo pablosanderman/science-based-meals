@@ -38,17 +38,30 @@ builder.Services.AddSwaggerGen(c =>
         Description = "API for managing science-based meals"
     });
 });
-builder.Services.AddDbContext<ApiDbContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+// Configure database context
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+if (connectionString?.Contains(":memory:") == true)
+{
+    builder.Services.AddDbContext<ApiDbContext>(options =>
+        options.UseInMemoryDatabase("TestingDb"));
+}
+else
+{
+    builder.Services.AddDbContext<ApiDbContext>(options =>
+        options.UseNpgsql(connectionString));
+}
 
 var app = builder.Build();
 
-// Apply migrations
+// Apply migrations only if using PostgreSQL
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<ApiDbContext>();
-    db.Database.Migrate();
+    if (db.Database.ProviderName != "Microsoft.EntityFrameworkCore.InMemory")
+    {
+        db.Database.Migrate();
+    }
 }
 
 // Configure the HTTP request pipeline.
@@ -66,3 +79,5 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+
+public partial class Program { }

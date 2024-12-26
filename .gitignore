@@ -3,6 +3,8 @@ bin/
 **/bin/
 obj/
 **/obj/
+[Oo]bj/
+**/[Oo]bj/
 node_modules/
 .env
 .vs/
