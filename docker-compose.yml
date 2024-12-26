@@ -4,8 +4,13 @@ services:
     build:
       context: ./api
       dockerfile: Dockerfile
+      target: development
     ports:
       - "8080:80"
+    volumes:
+      - ./api/src:/app/src
+      - /app/src/obj
+      - /app/src/bin
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://+:80
