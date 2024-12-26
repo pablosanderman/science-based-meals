@@ -1,6 +1,8 @@
 # stuff I don't want git to see
 bin/
+**/bin/
 obj/
+**/obj/
 node_modules/
 .env
 .vs/
