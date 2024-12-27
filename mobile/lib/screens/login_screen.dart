@@ -33,32 +33,24 @@ class _LoginScreenState extends State<LoginScreen> {
           _emailController.text,
           _passwordController.text,
         );
-        if (mounted) {
-          Navigator.of(context).pushReplacement(
-            MaterialPageRoute(builder: (_) => const HomeScreen()),
-          );
-        }
+        if (!mounted) return;
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (_) => const HomeScreen()),
+        );
       } catch (e, stackTrace) {
-        // Print error details to console
-        print('\n=== Login Error ===');
-        print('Error: $e');
-        print('Stack trace:\n$stackTrace');
-        print('==================\n');
-
         developer.log(
           'Login failed',
           error: e,
           stackTrace: stackTrace,
           name: 'LoginScreen',
         );
-        if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text(
-                  'Failed to login. Please check your credentials and try again.'),
-            ),
-          );
-        }
+        if (!mounted) return;
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text(
+                'Failed to login. Please check your credentials and try again.'),
+          ),
+        );
       } finally {
         if (mounted) {
           setState(() => _isLoading = false);

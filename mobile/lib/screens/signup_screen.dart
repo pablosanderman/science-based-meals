@@ -107,6 +107,7 @@ class _SignupScreenState extends State<SignupScreen> {
 
     setState(() => _isLoading = true);
     try {
+      if (!mounted) return;
       final username = await showDialog<String>(
         context: context,
         barrierDismissible: false,
@@ -114,6 +115,7 @@ class _SignupScreenState extends State<SignupScreen> {
       );
 
       if (username == null) {
+        if (!mounted) return;
         setState(() => _isLoading = false);
         return;
       }
@@ -124,12 +126,11 @@ class _SignupScreenState extends State<SignupScreen> {
         username,
       );
 
-      if (mounted) {
-        Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (_) => const HomeScreen()),
-          (route) => false,
-        );
-      }
+      if (!mounted) return;
+      Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(builder: (_) => const HomeScreen()),
+        (route) => false,
+      );
     } catch (e, stackTrace) {
       developer.log(
         'Registration error',
@@ -137,13 +138,12 @@ class _SignupScreenState extends State<SignupScreen> {
         stackTrace: stackTrace,
         name: 'SignupScreen',
       );
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Failed to create account. Please try again later.'),
-          ),
-        );
-      }
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Failed to create account. Please try again later.'),
+        ),
+      );
     } finally {
       if (mounted) {
         setState(() => _isLoading = false);
