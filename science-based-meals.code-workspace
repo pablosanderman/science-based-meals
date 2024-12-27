@@ -1,13 +1,25 @@
 {
   "folders": [
     {
-      "path": "."
+      "path": ".",
+      "name": "Root"
+    },
+    {
+      "path": "mobile",
+      "name": "Mobile App"
+    },
+    {
+      "path": "api",
+      "name": "API"
     }
   ],
   "settings": {
     "files.exclude": {
       "**/bin": true,
-      "**/obj": true
-    }
+      "**/obj": true,
+      "**/.dart_tool": true,
+      "**/build": true
+    },
+    "dart.projectSearchDepth": 2
   }
 }

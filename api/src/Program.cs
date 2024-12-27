@@ -1,7 +1,28 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 using ScienceBasedMealsApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Add JWT Authentication
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+	.AddJwtBearer(options =>
+	{
+		options.TokenValidationParameters = new TokenValidationParameters
+		{
+			ValidateIssuer = true,
+			ValidateAudience = true,
+			ValidateLifetime = true,
+			ValidateIssuerSigningKey = true,
+			ValidIssuer = builder.Configuration["Jwt:Issuer"],
+			ValidAudience = builder.Configuration["Jwt:Audience"],
+			IssuerSigningKey = new SymmetricSecurityKey(
+				Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"] ?? throw new InvalidOperationException("JWT Key not found in configuration."))
+			)
+		};
+	});
 
 // Add services to the container.
 
@@ -13,15 +34,15 @@ builder.Services.AddCors(options =>
 		if (builder.Environment.IsDevelopment())
 		{
 			policy.AllowAnyOrigin()
-				  .AllowAnyHeader()
-				  .AllowAnyMethod();
+					.AllowAnyHeader()
+					.AllowAnyMethod();
 		}
 		else
 		{
 			// In production, replace this with your actual frontend URL
 			policy.WithOrigins("https://yourdomain.com")
-				  .AllowAnyHeader()
-				  .AllowAnyMethod();
+					.AllowAnyHeader()
+					.AllowAnyMethod();
 		}
 	});
 });
@@ -73,6 +94,7 @@ if (app.Environment.IsDevelopment())
 // Enable CORS
 app.UseCors();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

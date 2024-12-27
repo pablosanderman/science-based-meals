@@ -7,6 +7,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ScienceBasedMealsApi.Models;
 using ScienceBasedMealsApi.Models.DTOs;
+using System.Security.Claims;
+using System.IdentityModel.Tokens.Jwt;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace ScienceBasedMealsApi.Controllers
 {
@@ -15,10 +19,35 @@ namespace ScienceBasedMealsApi.Controllers
 	public class UsersController : ControllerBase
 	{
 		private readonly ApiDbContext _context;
+		private readonly IConfiguration _configuration;
 
-		public UsersController(ApiDbContext context)
+		public UsersController(ApiDbContext context, IConfiguration configuration)
 		{
 			_context = context;
+			_configuration = configuration;
+		}
+
+		private string GenerateJwtToken(User user)
+		{
+			var claims = new[]
+			{
+				new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
+				new Claim(JwtRegisteredClaimNames.Email, user.Email),
+				new Claim("username", user.Username),
+				new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+			};
+
+			var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"] ?? throw new InvalidOperationException("JWT Key not found in configuration.")));
+			var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+
+			var token = new JwtSecurityToken(
+				issuer: _configuration["Jwt:Issuer"],
+				audience: _configuration["Jwt:Audience"],
+				claims: claims,
+				expires: DateTime.Now.AddDays(30),
+				signingCredentials: creds);
+
+			return new JwtSecurityTokenHandler().WriteToken(token);
 		}
 
 		// GET: api/Users
@@ -98,7 +127,7 @@ namespace ScienceBasedMealsApi.Controllers
 
 		// POST: api/Users
 		[HttpPost]
-		public async Task<ActionResult<User>> PostUser(CreateUserDto createUserDto)
+		public async Task<ActionResult<object>> PostUser(CreateUserDto createUserDto)
 		{
 			// Check if email already exists
 			if (await _context.Users.AnyAsync(u => u.Email == createUserDto.Email))
@@ -127,6 +156,8 @@ namespace ScienceBasedMealsApi.Controllers
 			try
 			{
 				await _context.SaveChangesAsync();
+				var token = GenerateJwtToken(user);
+				return CreatedAtAction("GetUser", new { id = user.Id }, new { token, user });
 			}
 			catch (DbUpdateException ex)
 			{
@@ -141,8 +172,6 @@ namespace ScienceBasedMealsApi.Controllers
 				}
 				throw;
 			}
-
-			return CreatedAtAction("GetUser", new { id = user.Id }, user);
 		}
 
 		// DELETE: api/Users/5
@@ -159,6 +188,45 @@ namespace ScienceBasedMealsApi.Controllers
 			await _context.SaveChangesAsync();
 
 			return NoContent();
+		}
+
+		// GET: api/Users/check-email
+		[HttpGet("check-email")]
+		public async Task<ActionResult<object>> CheckEmailAvailability([FromQuery] string email)
+		{
+			if (string.IsNullOrEmpty(email))
+			{
+				return BadRequest(new { message = "Email is required" });
+			}
+
+			var emailExists = await _context.Users.AnyAsync(u => u.Email == email);
+			return Ok(new { available = !emailExists });
+		}
+
+		// POST: api/Users/login
+		[HttpPost("login")]
+		public async Task<ActionResult<object>> Login(LoginDto loginDto)
+		{
+			// Find user by email
+			var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == loginDto.Email);
+			if (user == null)
+			{
+				return Unauthorized(new { message = "Invalid email or password" });
+			}
+
+			// Verify password
+			if (!BCrypt.Net.BCrypt.Verify(loginDto.Password, user.PasswordHash))
+			{
+				return Unauthorized(new { message = "Invalid email or password" });
+			}
+
+			// Update last login
+			user.LastLogin = DateTime.UtcNow;
+			await _context.SaveChangesAsync();
+
+			// Generate token
+			var token = GenerateJwtToken(user);
+			return Ok(new { token, user });
 		}
 
 		private bool UserExists(int id)
