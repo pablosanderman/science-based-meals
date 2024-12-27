@@ -70,42 +70,10 @@ namespace ScienceBasedMealsApi.Controllers
 				}
 			}
 
-			// Validate foreign keys if they're being updated
-			if (updateUserDto.GenderId.HasValue)
-			{
-				if (!await _context.Genders.AnyAsync(g => g.Id == updateUserDto.GenderId))
-				{
-					return BadRequest(new { message = "Invalid gender ID" });
-				}
-			}
-
-			if (updateUserDto.ActivityLevelId.HasValue)
-			{
-				if (!await _context.ActivityLevels.AnyAsync(a => a.Id == updateUserDto.ActivityLevelId))
-				{
-					return BadRequest(new { message = "Invalid activity level ID" });
-				}
-			}
-
-			if (updateUserDto.GoalId.HasValue)
-			{
-				if (!await _context.Goals.AnyAsync(g => g.Id == updateUserDto.GoalId))
-				{
-					return BadRequest(new { message = "Invalid goal ID" });
-				}
-			}
-
 			// Update only the provided fields
 			if (updateUserDto.Username != null) user.Username = updateUserDto.Username;
 			if (updateUserDto.Email != null) user.Email = updateUserDto.Email;
 			if (updateUserDto.Password != null) user.PasswordHash = BCrypt.Net.BCrypt.HashPassword(updateUserDto.Password);
-			if (updateUserDto.Bio != null) user.Bio = updateUserDto.Bio;
-			if (updateUserDto.Age.HasValue) user.Age = updateUserDto.Age.Value;
-			if (updateUserDto.HeightCm.HasValue) user.HeightCm = updateUserDto.HeightCm.Value;
-			if (updateUserDto.WeightKg.HasValue) user.WeightKg = updateUserDto.WeightKg.Value;
-			if (updateUserDto.GenderId.HasValue) user.GenderId = updateUserDto.GenderId.Value;
-			if (updateUserDto.ActivityLevelId.HasValue) user.ActivityLevelId = updateUserDto.ActivityLevelId.Value;
-			if (updateUserDto.GoalId.HasValue) user.GoalId = updateUserDto.GoalId.Value;
 
 			try
 			{
@@ -132,22 +100,6 @@ namespace ScienceBasedMealsApi.Controllers
 		[HttpPost]
 		public async Task<ActionResult<User>> PostUser(CreateUserDto createUserDto)
 		{
-			// Validate foreign keys exist
-			if (!await _context.Genders.AnyAsync(g => g.Id == createUserDto.GenderId))
-			{
-				return BadRequest(new { message = "Invalid gender ID" });
-			}
-
-			if (!await _context.ActivityLevels.AnyAsync(a => a.Id == createUserDto.ActivityLevelId))
-			{
-				return BadRequest(new { message = "Invalid activity level ID" });
-			}
-
-			if (!await _context.Goals.AnyAsync(g => g.Id == createUserDto.GoalId))
-			{
-				return BadRequest(new { message = "Invalid goal ID" });
-			}
-
 			// Check if email already exists
 			if (await _context.Users.AnyAsync(u => u.Email == createUserDto.Email))
 			{
@@ -166,13 +118,6 @@ namespace ScienceBasedMealsApi.Controllers
 				Username = createUserDto.Username,
 				Email = createUserDto.Email,
 				PasswordHash = BCrypt.Net.BCrypt.HashPassword(createUserDto.Password),
-				Bio = createUserDto.Bio,
-				Age = createUserDto.Age,
-				HeightCm = createUserDto.HeightCm,
-				WeightKg = createUserDto.WeightKg,
-				GenderId = createUserDto.GenderId,
-				ActivityLevelId = createUserDto.ActivityLevelId,
-				GoalId = createUserDto.GoalId,
 				RoleId = 1, // Default role (User)
 				JoinDate = DateTime.UtcNow,
 				LastLogin = DateTime.UtcNow

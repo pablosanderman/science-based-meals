@@ -5,9 +5,6 @@ namespace ScienceBasedMealsApi.Models
 	public class ApiDbContext(DbContextOptions option) : DbContext(option)
 	{
 		public required DbSet<User> Users { get; set; }
-		public required DbSet<Gender> Genders { get; set; }
-		public required DbSet<ActivityLevel> ActivityLevels { get; set; }
-		public required DbSet<Goal> Goals { get; set; }
 		public required DbSet<DietaryPreference> DietaryPreferences { get; set; }
 		public required DbSet<UserDietaryPreference> UserDietaryPreferences { get; set; }
 		public required DbSet<Ingredient> Ingredients { get; set; }
@@ -35,26 +32,6 @@ namespace ScienceBasedMealsApi.Models
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{
 			// Seed initial data
-			modelBuilder.Entity<Gender>().HasData(
-				new Gender { Id = 1, Name = "Male", Description = "Male gender" },
-				new Gender { Id = 2, Name = "Female", Description = "Female gender" },
-				new Gender { Id = 3, Name = "Other", Description = "Other gender identity" }
-			);
-
-			modelBuilder.Entity<ActivityLevel>().HasData(
-				new ActivityLevel { Id = 1, Name = "Sedentary", Description = "Little or no exercise" },
-				new ActivityLevel { Id = 2, Name = "Light", Description = "Light exercise/sports 1-3 days/week" },
-				new ActivityLevel { Id = 3, Name = "Moderate", Description = "Moderate exercise/sports 3-5 days/week" },
-				new ActivityLevel { Id = 4, Name = "Active", Description = "Hard exercise/sports 6-7 days/week" },
-				new ActivityLevel { Id = 5, Name = "Very Active", Description = "Very hard exercise/sports & physical job or training twice per day" }
-			);
-
-			modelBuilder.Entity<Goal>().HasData(
-				new Goal { Id = 1, Name = "Weight Loss", Description = "Goal to lose weight" },
-				new Goal { Id = 2, Name = "Maintenance", Description = "Goal to maintain current weight" },
-				new Goal { Id = 3, Name = "Muscle Gain", Description = "Goal to gain muscle mass" }
-			);
-
 			modelBuilder.Entity<Role>().HasData(
 				new Role { Id = 1, Name = "User" },
 				new Role { Id = 2, Name = "Moderator" },
@@ -117,24 +94,6 @@ namespace ScienceBasedMealsApi.Models
 				 .ToTable(t => t.HasCheckConstraint("CK_UserConnection_SelfFollow", "\"FollowerUserId\" <> \"FollowedUserId\""));
 
 			// Configure relationships
-			modelBuilder.Entity<User>()
-				.HasOne(u => u.Gender)
-				.WithMany(g => g.Users)
-				.HasForeignKey(u => u.GenderId)
-				.OnDelete(DeleteBehavior.Restrict);
-
-			modelBuilder.Entity<User>()
-				.HasOne(u => u.ActivityLevel)
-				.WithMany(a => a.Users)
-				.HasForeignKey(u => u.ActivityLevelId)
-				.OnDelete(DeleteBehavior.Restrict);
-
-			modelBuilder.Entity<User>()
-				.HasOne(u => u.Goal)
-				.WithMany(g => g.Users)
-				.HasForeignKey(u => u.GoalId)
-				.OnDelete(DeleteBehavior.Restrict);
-
 			modelBuilder.Entity<User>()
 				.HasOne(u => u.Role)
 				.WithMany(r => r.Users)
