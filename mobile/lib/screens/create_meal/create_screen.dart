@@ -6,6 +6,7 @@ import 'steps/ingredients_step.dart';
 import 'steps/cooking_steps_step.dart';
 import 'steps/reference_links_step.dart';
 import 'steps/save_meal_step.dart';
+import '../main_navigation_screen.dart';
 
 class CreateScreen extends StatelessWidget {
   const CreateScreen({super.key});
@@ -22,24 +23,42 @@ class CreateScreen extends StatelessWidget {
 class CreateScreenContent extends StatelessWidget {
   const CreateScreenContent({super.key});
 
+  void _handleClose(BuildContext context) {
+    // Switch to home tab
+    MainNavigationScreen.switchToTab(0);
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Create New Meal'),
-      ),
-      body: Consumer<CreateMealState>(
-        builder: (context, state, _) {
-          return Column(
-            children: [
-              _buildProgressIndicator(state, context),
-              Expanded(
-                child: _buildCurrentStep(state),
-              ),
-              _buildNavigationButtons(state, context),
-            ],
-          );
-        },
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (bool didPop, dynamic result) async {
+        if (didPop) {
+          return;
+        }
+        _handleClose(context);
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text('Create New Meal'),
+          leading: IconButton(
+            icon: const Icon(Icons.close),
+            onPressed: () => _handleClose(context),
+          ),
+        ),
+        body: Consumer<CreateMealState>(
+          builder: (context, state, _) {
+            return Column(
+              children: [
+                _buildProgressIndicator(state, context),
+                Expanded(
+                  child: _buildCurrentStep(state),
+                ),
+                _buildNavigationButtons(state, context),
+              ],
+            );
+          },
+        ),
       ),
     );
   }
@@ -125,7 +144,8 @@ class CreateScreenContent extends StatelessWidget {
     );
 
     if (success) {
-      Navigator.pop(context);
+      state.reset();
+      _handleClose(context);
     }
   }
 }

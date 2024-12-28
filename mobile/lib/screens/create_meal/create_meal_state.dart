@@ -6,6 +6,17 @@ class CreateMealState extends ChangeNotifier {
   final Meal meal = Meal();
   int currentStep = 0;
 
+  void reset() {
+    meal.image = null;
+    meal.name = '';
+    meal.ingredients.clear();
+    meal.cookingSteps.clear();
+    meal.references.clear();
+    meal.visibility = 'public_unapproved';
+    currentStep = 0;
+    notifyListeners();
+  }
+
   void updateMealImage(File image) {
     meal.image = image;
     notifyListeners();
@@ -83,6 +94,12 @@ class CreateMealState extends ChangeNotifier {
         return meal.cookingSteps.isNotEmpty;
       case 3:
         return true; // References are optional
+      case 4:
+        // On the final step, ensure all required fields are filled
+        return meal.image != null &&
+            meal.name.isNotEmpty &&
+            meal.ingredients.isNotEmpty &&
+            meal.cookingSteps.isNotEmpty;
       default:
         return false;
     }
