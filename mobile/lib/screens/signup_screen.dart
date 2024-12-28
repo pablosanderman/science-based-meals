@@ -4,7 +4,6 @@ import 'dart:async';
 import 'dart:developer' as developer;
 import '../services/auth_service.dart';
 import '../widgets/username_modal.dart';
-import 'home_screen.dart';
 
 class SignupScreen extends StatefulWidget {
   const SignupScreen({super.key});

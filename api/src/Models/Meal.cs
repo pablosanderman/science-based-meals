@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ScienceBasedMealsApi.Models
 {
@@ -12,7 +13,11 @@ namespace ScienceBasedMealsApi.Models
 		[Required]
 		public string Name { get; set; } = "";
 
-		public string Description { get; set; } = "";
+		[Required]
+		[ForeignKey("Creator")]
+		public int CreatorId { get; set; }
+
+		public required User Creator { get; set; }
 
 		[Required]
 		public DateTime CreationDate { get; set; }

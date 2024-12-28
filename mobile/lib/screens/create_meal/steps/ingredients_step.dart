@@ -13,7 +13,7 @@ class IngredientsStep extends StatefulWidget {
 class _IngredientsStepState extends State<IngredientsStep> {
   final searchController = TextEditingController();
   final quantityController = TextEditingController();
-  String selectedUnit = 'grams';
+  String selectedUnit = 'g';
   final _formKey = GlobalKey<FormState>();
   final _ingredientService = IngredientService();
   List<Map<String, dynamic>> searchResults = [];
@@ -39,13 +39,14 @@ class _IngredientsStepState extends State<IngredientsStep> {
     if (_formKey.currentState?.validate() ?? false) {
       final quantity = _parseQuantity(quantityController.text);
       if (quantity != null) {
-        state.addIngredient({
-          'id': searchResult['id'],
+        final ingredient = {
+          'ingredientId': searchResult['id'],
           'name': searchResult['name'],
-          'quantity': quantity,
+          'amount': quantity,
           'unit': selectedUnit,
           'nutrients': searchResult['nutrients'],
-        });
+        };
+        state.addIngredient(ingredient);
         searchController.clear();
         quantityController.clear();
         setState(() {
@@ -153,7 +154,7 @@ class _IngredientsStepState extends State<IngredientsStep> {
                                   value: selectedUnit,
                                   items: const [
                                     DropdownMenuItem(
-                                      value: 'grams',
+                                      value: 'g',
                                       child: Text('Grams'),
                                     ),
                                     DropdownMenuItem(
@@ -215,7 +216,7 @@ class _IngredientsStepState extends State<IngredientsStep> {
                   child: ListTile(
                     title: Text(ingredient['name'] as String),
                     subtitle: Text(
-                      '${ingredient['quantity']} ${ingredient['unit']}',
+                      '${ingredient['amount']} ${ingredient['unit']}',
                     ),
                     trailing: IconButton(
                       icon: const Icon(Icons.delete),

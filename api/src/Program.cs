@@ -48,17 +48,8 @@ builder.Services.AddCors(options =>
 });
 
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(c =>
-{
-	c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo
-	{
-		Title = "Science Based Meals API",
-		Version = "v1",
-		Description = "API for managing science-based meals"
-	});
-});
+builder.Services.AddSwaggerGen();
 
 // Configure database context
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
@@ -73,13 +64,13 @@ using (var scope = app.Services.CreateScope())
 	var db = scope.ServiceProvider.GetRequiredService<ApiDbContext>();
 	try
 	{
-		// Check if database exists and create if it doesn't
-		db.Database.EnsureCreated();
+		// This will create the database and apply all migrations
+		db.Database.Migrate();
 	}
 	catch (Exception ex)
 	{
 		var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
-		logger.LogError(ex, "An error occurred while migrating or initializing the database.");
+		logger.LogError(ex, "An error occurred while migrating the database.");
 		throw;
 	}
 }
@@ -91,7 +82,8 @@ if (app.Environment.IsDevelopment())
 	app.UseSwaggerUI();
 }
 
-// Enable CORS
+app.UseHttpsRedirection();
+
 app.UseCors();
 
 app.UseAuthentication();

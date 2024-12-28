@@ -12,8 +12,8 @@ using ScienceBasedMealsApi.Models;
 namespace ScienceBasedMealsApi.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    [Migration("20241228165051_AddIngredientAndNutrientSeeds")]
-    partial class AddIngredientAndNutrientSeeds
+    [Migration("20241228192257_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -15014,9 +15014,8 @@ namespace ScienceBasedMealsApi.Migrations
                     b.Property<DateTime>("CreationDate")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<int>("CreatorId")
+                        .HasColumnType("integer");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -15026,6 +15025,8 @@ namespace ScienceBasedMealsApi.Migrations
                         .HasColumnType("timestamp with time zone");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CreatorId");
 
                     b.HasIndex("Name");
 
@@ -15148,6 +15149,9 @@ namespace ScienceBasedMealsApi.Migrations
                     b.Property<DateTime>("CreationDate")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<string>("ImageUrl")
+                        .HasColumnType("text");
+
                     b.Property<string>("Instructions")
                         .IsRequired()
                         .HasColumnType("text");
@@ -15155,15 +15159,12 @@ namespace ScienceBasedMealsApi.Migrations
                     b.Property<int>("MealId")
                         .HasColumnType("integer");
 
-                    b.Property<string>("Notes")
-                        .IsRequired()
-                        .HasColumnType("text");
-
                     b.Property<int?>("UserId")
                         .HasColumnType("integer");
 
-                    b.Property<int>("Version")
-                        .HasColumnType("integer");
+                    b.Property<string>("Version")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
@@ -15697,6 +15698,17 @@ namespace ScienceBasedMealsApi.Migrations
                     b.Navigation("Ingredient");
 
                     b.Navigation("ResearchReference");
+                });
+
+            modelBuilder.Entity("ScienceBasedMealsApi.Models.Meal", b =>
+                {
+                    b.HasOne("ScienceBasedMealsApi.Models.User", "Creator")
+                        .WithMany()
+                        .HasForeignKey("CreatorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Creator");
                 });
 
             modelBuilder.Entity("ScienceBasedMealsApi.Models.MealApproval", b =>

@@ -172,7 +172,10 @@ class CreateScreenContent extends StatelessWidget {
 
     if (success) {
       state.reset();
-      Navigator.pop(context); // Return to previous screen
+      // Get the previous index or default to 0 (home)
+      final previousIndex =
+          MainNavigationScreen.mainNavKey.currentState?.previousIndex ?? 0;
+      MainNavigationScreen.switchToTab(previousIndex);
     }
   }
 }

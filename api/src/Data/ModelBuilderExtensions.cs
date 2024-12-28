@@ -20,7 +20,9 @@ public static class ModelBuilderExtensions
         new Unit { Id = 2, Name = "mg", Description = "Milligrams" },
         new Unit { Id = 3, Name = "µg", Description = "Micrograms" },
         new Unit { Id = 4, Name = "IU", Description = "International Units" },
-        new Unit { Id = 5, Name = "kcal", Description = "Kilocalories" }
+        new Unit { Id = 5, Name = "kcal", Description = "Kilocalories" },
+        new Unit { Id = 6, Name = "pieces", Description = "Pieces" },
+        new Unit { Id = 7, Name = "ml", Description = "Milliliters" }
     );
   }
 

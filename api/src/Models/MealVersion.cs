@@ -16,14 +16,14 @@ namespace ScienceBasedMealsApi.Models
 		public required Meal Meal { get; set; }
 
 		[Required]
-		public int Version { get; set; }
+		public string Version { get; set; } = "";
 
 		[Required]
 		public DateTime CreationDate { get; set; }
 
 		public string Instructions { get; set; } = "";
 
-		public string Notes { get; set; } = "";
+		public string? ImageUrl { get; set; }
 
 		public ApprovalStatus ApprovalStatus { get; set; }
 
