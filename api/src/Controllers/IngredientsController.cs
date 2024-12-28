@@ -1,16 +1,15 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ScienceBasedMealsApi.Models;
+using ScienceBasedMealsApi.Models.DTOs;
 
 namespace ScienceBasedMealsApi.Controllers
 {
-	[Route("api/[controller]")]
 	[ApiController]
+	[Route("api/[controller]")]
 	public class IngredientsController : ControllerBase
 	{
 		private readonly ApiDbContext _context;
@@ -20,88 +19,69 @@ namespace ScienceBasedMealsApi.Controllers
 			_context = context;
 		}
 
-		// GET: api/Ingredients
 		[HttpGet]
-		public async Task<ActionResult<IEnumerable<Ingredient>>> GetIngredients()
+		public async Task<ActionResult<IEnumerable<IngredientDto>>> GetIngredients()
 		{
-			return await _context.Ingredients.ToListAsync();
+			var ingredients = await _context.Ingredients
+				.Include(i => i.Nutrients)
+					.ThenInclude(n => n.Nutrient)
+						.ThenInclude(n => n.Unit)
+				.ToListAsync();
+
+			return Ok(ingredients.Select(i => new IngredientDto
+			{
+				Id = i.Id,
+				Name = i.Name,
+				Description = i.Description,
+				CreationDate = i.CreationDate,
+				UpdatedAt = i.UpdatedAt,
+				Nutrients = i.Nutrients.Select(n => new IngredientNutrientDto
+				{
+					NutrientId = n.NutrientId,
+					NutrientName = n.Nutrient?.Name ?? "",
+					Amount = n.Amount,
+					UnitName = n.Nutrient?.Unit?.Name ?? "",
+					DailyValue = n.Nutrient?.DailyValue ?? 0,
+					PercentageOfDailyValue = n.Nutrient?.DailyValue > 0
+						? (n.Amount / n.Nutrient.DailyValue) * 100
+						: 0
+				}).ToList()
+			}));
 		}
 
-		// GET: api/Ingredients/5
 		[HttpGet("{id}")]
-		public async Task<ActionResult<Ingredient>> GetIngredient(int id)
+		public async Task<ActionResult<IngredientDto>> GetIngredient(int id)
 		{
-			var ingredient = await _context.Ingredients.FindAsync(id);
+			var ingredient = await _context.Ingredients
+				.Include(i => i.Nutrients)
+					.ThenInclude(n => n.Nutrient)
+						.ThenInclude(n => n.Unit)
+				.FirstOrDefaultAsync(i => i.Id == id);
 
 			if (ingredient == null)
 			{
 				return NotFound();
 			}
 
-			return ingredient;
-		}
-
-		// PUT: api/Ingredients/5
-		// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-		[HttpPut("{id}")]
-		public async Task<IActionResult> PutIngredient(int id, Ingredient ingredient)
-		{
-			if (id != ingredient.Id)
+			return new IngredientDto
 			{
-				return BadRequest();
-			}
-
-			_context.Entry(ingredient).State = EntityState.Modified;
-
-			try
-			{
-				await _context.SaveChangesAsync();
-			}
-			catch (DbUpdateConcurrencyException)
-			{
-				if (!IngredientExists(id))
+				Id = ingredient.Id,
+				Name = ingredient.Name,
+				Description = ingredient.Description,
+				CreationDate = ingredient.CreationDate,
+				UpdatedAt = ingredient.UpdatedAt,
+				Nutrients = ingredient.Nutrients.Select(n => new IngredientNutrientDto
 				{
-					return NotFound();
-				}
-				else
-				{
-					throw;
-				}
-			}
-
-			return NoContent();
-		}
-
-		// POST: api/Ingredients
-		// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-		[HttpPost]
-		public async Task<ActionResult<Ingredient>> PostIngredient(Ingredient ingredient)
-		{
-			_context.Ingredients.Add(ingredient);
-			await _context.SaveChangesAsync();
-
-			return CreatedAtAction("GetIngredient", new { id = ingredient.Id }, ingredient);
-		}
-
-		// DELETE: api/Ingredients/5
-		[HttpDelete("{id}")]
-		public async Task<IActionResult> DeleteIngredient(int id)
-		{
-			var ingredient = await _context.Ingredients.FindAsync(id);
-			if (ingredient == null)
-			{
-				return NotFound();
-			}
-
-			_context.Ingredients.Remove(ingredient);
-			await _context.SaveChangesAsync();
-
-			return NoContent();
-		}
-
-		private bool IngredientExists(int id)
-		{
-			return _context.Ingredients.Any(e => e.Id == id);
+					NutrientId = n.NutrientId,
+					NutrientName = n.Nutrient?.Name ?? "",
+					Amount = n.Amount,
+					UnitName = n.Nutrient?.Unit?.Name ?? "",
+					DailyValue = n.Nutrient?.DailyValue ?? 0,
+					PercentageOfDailyValue = n.Nutrient?.DailyValue > 0
+						? (n.Amount / n.Nutrient.DailyValue) * 100
+						: 0
+				}).ToList()
+			};
 		}
 	}
 }

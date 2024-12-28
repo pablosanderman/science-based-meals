@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using ScienceBasedMealsApi.Data;
 
 namespace ScienceBasedMealsApi.Models
 {
@@ -37,6 +38,9 @@ namespace ScienceBasedMealsApi.Models
 				new Role { Id = 2, Name = "Moderator" },
 				new Role { Id = 3, Name = "Admin" }
 			);
+
+			// Add our ingredient, nutrient and unit seed data
+			modelBuilder.SeedData();
 
 			// Configure composite primary keys
 			modelBuilder.Entity<UserDietaryPreference>()
