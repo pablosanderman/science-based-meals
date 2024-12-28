@@ -21,6 +21,10 @@ class MainNavigationScreen extends StatefulWidget {
 class _MainNavigationScreenState extends State<MainNavigationScreen> {
   int _selectedIndex = 0;
 
+  int _previousIndex = 0;
+
+  int get previousIndex => _previousIndex;
+
   // Navigator keys for each tab
   final List<GlobalKey<NavigatorState>> _navigatorKeys = [
     GlobalKey<NavigatorState>(), // Home
@@ -30,6 +34,11 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
   ];
 
   void _onItemTapped(int index) {
+    // If the user is tapping 'Create' tab, remember which tab they came from
+    if (index == 2) {
+      _previousIndex = _selectedIndex;
+    }
+
     if (index == _selectedIndex) {
       // If tapping the active tab, pop to first route
       _navigatorKeys[index].currentState?.popUntil((route) => route.isFirst);

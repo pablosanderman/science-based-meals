@@ -19,6 +19,43 @@ namespace ScienceBasedMealsApi.Controllers
 			_context = context;
 		}
 
+		[HttpGet("search")]
+		public async Task<ActionResult<IEnumerable<IngredientDto>>> SearchIngredients([FromQuery] string query)
+		{
+			if (string.IsNullOrWhiteSpace(query))
+			{
+				return Ok(Array.Empty<IngredientDto>());
+			}
+
+			var ingredients = await _context.Ingredients
+				.Include(i => i.Nutrients)
+					.ThenInclude(n => n.Nutrient)
+						.ThenInclude(n => n.Unit)
+				.Where(i => i.Name.ToLower().Contains(query.ToLower()))
+				.Take(10)
+				.ToListAsync();
+
+			return Ok(ingredients.Select(i => new IngredientDto
+			{
+				Id = i.Id,
+				Name = i.Name,
+				Description = i.Description,
+				CreationDate = i.CreationDate,
+				UpdatedAt = i.UpdatedAt,
+				Nutrients = i.Nutrients.Select(n => new IngredientNutrientDto
+				{
+					NutrientId = n.NutrientId,
+					NutrientName = n.Nutrient?.Name ?? "",
+					Amount = n.Amount,
+					UnitName = n.Nutrient?.Unit?.Name ?? "",
+					DailyValue = n.Nutrient?.DailyValue ?? 0,
+					PercentageOfDailyValue = n.Nutrient?.DailyValue > 0
+						? (n.Amount / n.Nutrient.DailyValue) * 100
+						: 0
+				}).ToList()
+			}));
+		}
+
 		[HttpGet]
 		public async Task<ActionResult<IEnumerable<IngredientDto>>> GetIngredients()
 		{

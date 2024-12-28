@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:science_based_meals/screens/main_navigation_screen.dart';
 import 'dart:async';
 import 'dart:developer' as developer;
 import '../services/auth_service.dart';
@@ -128,7 +129,10 @@ class _SignupScreenState extends State<SignupScreen> {
 
       if (!mounted) return;
       Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(builder: (_) => const HomeScreen()),
+        MaterialPageRoute(
+          builder: (_) =>
+              MainNavigationScreen(key: MainNavigationScreen.mainNavKey),
+        ),
         (route) => false,
       );
     } catch (e, stackTrace) {

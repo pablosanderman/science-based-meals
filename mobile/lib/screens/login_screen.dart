@@ -34,8 +34,12 @@ class _LoginScreenState extends State<LoginScreen> {
           _passwordController.text,
         );
         if (!mounted) return;
-        Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (_) => const MainNavigationScreen()),
+        Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(
+            builder: (_) =>
+                MainNavigationScreen(key: MainNavigationScreen.mainNavKey),
+          ),
+          (route) => false,
         );
       } catch (e, stackTrace) {
         developer.log(

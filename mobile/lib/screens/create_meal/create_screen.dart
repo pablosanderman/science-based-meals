@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:science_based_meals/screens/main_navigation_screen.dart';
 import 'create_meal_state.dart';
 import 'steps/meal_photo_name_step.dart';
 import 'steps/ingredients_step.dart';
 import 'steps/cooking_steps_step.dart';
 import 'steps/reference_links_step.dart';
 import 'steps/save_meal_step.dart';
-import '../main_navigation_screen.dart';
 
 class CreateScreen extends StatelessWidget {
   const CreateScreen({super.key});
@@ -24,8 +24,35 @@ class CreateScreenContent extends StatelessWidget {
   const CreateScreenContent({super.key});
 
   void _handleClose(BuildContext context) {
-    // Switch to home tab
-    MainNavigationScreen.switchToTab(0);
+    final state = context.read<CreateMealState>();
+
+    // Show confirmation dialog
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Discard Changes?'),
+        content: const Text('Are you sure you want to discard your changes?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context); // Close dialog
+              state.reset();
+              // get the previousIndex via the getter
+              final previous =
+                  MainNavigationScreen.mainNavKey.currentState?.previousIndex ??
+                      0;
+
+              MainNavigationScreen.switchToTab(previous);
+            },
+            child: const Text('Discard'),
+          ),
+        ],
+      ),
+    );
   }
 
   @override
@@ -145,7 +172,7 @@ class CreateScreenContent extends StatelessWidget {
 
     if (success) {
       state.reset();
-      _handleClose(context);
+      Navigator.pop(context); // Return to previous screen
     }
   }
 }
