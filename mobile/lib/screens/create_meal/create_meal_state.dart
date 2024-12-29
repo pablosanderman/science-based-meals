@@ -167,7 +167,6 @@ class CreateMealState extends ChangeNotifier {
 
       // Send the request
       final response = await request.send();
-      final responseStr = await response.stream.bytesToString();
 
       if (response.statusCode == 201) {
         return true;

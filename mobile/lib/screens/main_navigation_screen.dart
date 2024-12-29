@@ -7,18 +7,18 @@ import 'account_screen.dart';
 class MainNavigationScreen extends StatefulWidget {
   const MainNavigationScreen({super.key});
 
-  static final GlobalKey<_MainNavigationScreenState> mainNavKey =
-      GlobalKey<_MainNavigationScreenState>();
+  static final GlobalKey<MainNavigationScreenState> mainNavKey =
+      GlobalKey<MainNavigationScreenState>();
 
   static void switchToTab(int index) {
     mainNavKey.currentState?._onItemTapped(index);
   }
 
   @override
-  State<MainNavigationScreen> createState() => _MainNavigationScreenState();
+  State<MainNavigationScreen> createState() => MainNavigationScreenState();
 }
 
-class _MainNavigationScreenState extends State<MainNavigationScreen> {
+class MainNavigationScreenState extends State<MainNavigationScreen> {
   int _selectedIndex = 0;
 
   int _previousIndex = 0;

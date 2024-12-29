@@ -47,12 +47,23 @@ public class CustomWebApplicationFactory<TProgram> : WebApplicationFactory<TProg
 				// Seed test data
 				if (!db.Meals.Any())
 				{
-					db.Meals.Add(new Meal
+					var user = new User
+					{
+						Email = "test@test.com",
+						Username = "test",
+						PasswordHash = "password",
+					};
+
+					db.Users.Add(user);
+
+					var meal = new Meal
 					{
 						Name = "Test Meal 1",
-						Description = "Test Description 1",
+						Creator = user,
 						CreationDate = DateTime.UtcNow
-					});
+					};
+
+					db.Meals.Add(meal);
 
 					db.SaveChanges();
 				}

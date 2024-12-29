@@ -1,8 +1,11 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'dart:developer' as developer;
+
+import 'package:science_based_meals/config.dart';
 
 class IngredientService {
-  static const String baseUrl = 'http://localhost:8080/api';
+  static const String baseUrl = Config.apiBaseUrl;
 
   Future<List<Map<String, dynamic>>> searchIngredients(String query) async {
     if (query.isEmpty) {
@@ -20,7 +23,7 @@ class IngredientService {
       }
       return [];
     } catch (e) {
-      print('Error searching ingredients: $e');
+      developer.log('Error searching ingredients: $e');
       return [];
     }
   }
