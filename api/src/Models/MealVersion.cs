@@ -13,7 +13,7 @@ namespace ScienceBasedMealsApi.Models
 		[ForeignKey("Meal")]
 		public int MealId { get; set; }
 
-		public required Meal Meal { get; set; }
+		public Meal? Meal { get; set; }
 
 		[Required]
 		public string Version { get; set; } = "";
@@ -25,7 +25,7 @@ namespace ScienceBasedMealsApi.Models
 
 		public string? ImageUrl { get; set; }
 
-		public ApprovalStatus ApprovalStatus { get; set; }
+		public ApprovalStatus? ApprovalStatus { get; set; }
 
 		public DateTime? ApprovalDate { get; set; }
 

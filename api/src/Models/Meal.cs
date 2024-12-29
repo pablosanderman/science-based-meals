@@ -17,7 +17,7 @@ namespace ScienceBasedMealsApi.Models
 		[ForeignKey("Creator")]
 		public int CreatorId { get; set; }
 
-		public required User Creator { get; set; }
+		public User? Creator { get; set; }
 
 		[Required]
 		public DateTime CreationDate { get; set; }

@@ -3,9 +3,9 @@ using ScienceBasedMealsApi.Models;
 
 namespace ScienceBasedMealsApi.Data;
 
-public static class ModelBuilderExtensions
+public static class IngredientSeedData
 {
-  public static void SeedData(this ModelBuilder modelBuilder)
+  public static void SeedIngredientData(this ModelBuilder modelBuilder)
   {
     SeedUnits(modelBuilder);
     SeedNutrients(modelBuilder);

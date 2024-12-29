@@ -64,11 +64,7 @@ using (var scope = app.Services.CreateScope())
 	var db = scope.ServiceProvider.GetRequiredService<ApiDbContext>();
 	try
 	{
-		// Only migrate if we're using a relational database
-		if (db.Database.ProviderName?.Contains("Microsoft.EntityFrameworkCore.Relational") == true)
-		{
-			db.Database.Migrate();
-		}
+		db.Database.Migrate();
 	}
 	catch (Exception ex)
 	{

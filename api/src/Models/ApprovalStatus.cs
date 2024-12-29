@@ -20,13 +20,13 @@ namespace ScienceBasedMealsApi.Models
 		public int MealVersionId { get; set; }
 
 		[ForeignKey("MealVersionId")]
-		public required MealVersion MealVersion { get; set; }
+		public MealVersion? MealVersion { get; set; }
 
 		[Required]
 		public int ReviewerUserId { get; set; }
 
 		[ForeignKey("ReviewerUserId")]
-		public required User ReviewerUser { get; set; }
+		public User? ReviewerUser { get; set; }
 
 		[Required]
 		public ApprovalStatus ApprovalStatus { get; set; }

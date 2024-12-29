@@ -32,15 +32,10 @@ namespace ScienceBasedMealsApi.Models
 
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{
-			// Seed initial data
-			modelBuilder.Entity<Role>().HasData(
-				new Role { Id = 1, Name = "User" },
-				new Role { Id = 2, Name = "Moderator" },
-				new Role { Id = 3, Name = "Admin" }
-			);
-
-			// Add our ingredient, nutrient and unit seed data
-			modelBuilder.SeedData();
+			// Add our seed data in the correct order
+			modelBuilder.SeedUserData(); // First seed users and roles
+			modelBuilder.SeedIngredientData(); // Then seed ingredients, nutrients, etc.
+			modelBuilder.SeedMealData(); // Finally seed meals and related data
 
 			// Configure composite primary keys
 			modelBuilder.Entity<UserDietaryPreference>()

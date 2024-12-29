@@ -39,7 +39,7 @@ namespace ScienceBasedMealsApi.Models
 
 		public ICollection<Notification> Notifications { get; set; } = [];
 
-		public ICollection<MealVersion> MealVersionsCreated { get; set; } = [];
+		public ICollection<Meal> MealsCreated { get; set; } = [];
 
 		public ICollection<MealApproval> MealApprovals { get; set; } = [];
 
