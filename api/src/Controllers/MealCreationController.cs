@@ -161,7 +161,7 @@ namespace ScienceBasedMealsApi.Controllers
 
         return Created($"/api/MealVersions/{mealVersion.Id}", responseDto);
       }
-      catch (Exception ex)
+      catch (Exception)
       {
         await transaction.RollbackAsync();
         throw;
